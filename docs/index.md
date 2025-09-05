@@ -35,6 +35,9 @@ data:
       path: library/structure/UnionFind.hpp
       title: library/structure/UnionFind.hpp
     - icon: ':warning:'
+      path: library/structure/ValueHavingUF.hpp
+      title: library/structure/ValueHavingUF.hpp
+    - icon: ':warning:'
       path: library/structure/dictional_UF.hpp
       title: library/structure/dictional_UF.hpp
     - icon: ':warning:'
