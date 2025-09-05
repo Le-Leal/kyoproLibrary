@@ -6,12 +6,11 @@ using ll = long long;
 
 struct UnionFind {
     vector<int> par;
-    vector<int> rank;
+    vector<int> siz;
     int count;
-    UnionFind(int N):par(N),rank(N,0),count(N){
+    UnionFind(int N):par(N),siz(N,1),count(N){
         rep(i,N) par[i]=i;
     }
-    //経路圧縮
     int root(int x){
         return par[x]==x?x:par[x]=root(par[x]);
     }
@@ -19,12 +18,15 @@ struct UnionFind {
         int rx=root(x),ry=root(y);
         if(rx==ry) return;
         count--;
-        if(rank[rx]<rank[ry]) {
+        if(siz[rx]<siz[ry]) {
             par[rx]=ry;
+            siz[ry]+=siz[rx];
+            siz[rx]=0;
         }
         else {
             par[ry]=rx;
-            if(rank[rx]==rank[ry]) rank[rx]++;
+            siz[rx]+=siz[ry];
+            siz[ry]=0;
         }
     }
     bool same(int x,int y){
@@ -32,5 +34,8 @@ struct UnionFind {
     }
     int comp_count() const{
         return count;
+    }
+    int size(int x) {
+        return siz[root(x)];
     }
 };
