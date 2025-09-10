@@ -8,20 +8,24 @@ template<class T>
 struct ValueHavinguf {
     vector<int> par;
     vector<int> siz;
-    vector<T> info;
+    vector<T> info;   // 各成分の値
+    vector<T> node;   // 各ノードの値
     function<T(const T&, const T&)> op;
     int count;
 
     ValueHavinguf(int N, function<T(const T&, const T&)> op_, const T& default_value=T())
-    : par(N), siz(N, 1), info(N), op(move(op_)), count(N) {
-        rep(i,N) { par[i]=i, info[i]=default_value; }
+        : par(N), siz(N, 1), info(N), node(N, default_value), op(move(op_)), count(N) {
+        rep(i,N) {
+            par[i]=i;
+            info[i]=default_value;
+        }
     }
 
     ValueHavinguf(const vector<T>& initial_info, function<T(const T&, const T&)> op_)
         : par((int)initial_info.size()), siz(initial_info.size(), 1),
-          info(initial_info), op(move(op_)), count((int)initial_info.size())
-    {
-        rep(i,(int)par.size()) par[i] = i;
+          info(initial_info), node(initial_info),
+          op(move(op_)), count((int)initial_info.size()) {
+        rep(i,(int)par.size()) par[i]=i;
     }
 
     int root(int x){
@@ -60,8 +64,19 @@ struct ValueHavinguf {
         return info[root(x)];
     }
 
-    void setinfo(int x,const T& v) {
-        info[root(x)]=v;
+    T getnode(int x) { 
+        return node[x]; 
+    }
+
+    void setnode(int x,const T& v) {
+        int r=root(x);
+        if(op(1,1)==2) {
+            info[r]=info[r]-node[x]+v;
+        } 
+        else {
+            info[r]=(info[r]^node[x])^v;
+        }
+        node[x]=v;
     }
 
     int size(int x) {
